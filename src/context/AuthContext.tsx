@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext,  useState, type ReactNode } from 'react'
+import { createContext, useState, type ReactNode } from 'react'
+import { registerUser } from '../services/auth.api'
 
 interface User {
   id: string
@@ -17,7 +18,6 @@ interface AuthContextType {
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-// Mock users for demonstration
 const mockUsers = [
   { id: '1', name: 'John Doe', email: 'john@example.com', password: 'password123' },
   { id: '2', name: 'Jane Smith', email: 'jane@example.com', password: 'password123' }
@@ -37,14 +37,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const register = async (name: string, email: string, password: string) => {
-    // Mock register logic
-    const newUser = {
-      id: Date.now().toString(),
-      name,
-      email
+    try {
+      const data = await registerUser({ name, email, password });
+
+      setUser({
+        id: data.id,
+        name,
+        email,
+      });
+    } catch (error) {
+      console.error('Register failed:', error);
+      throw error;
     }
-    setUser(newUser)
-  }
+  };
+
 
   const logout = () => {
     setUser(null)
