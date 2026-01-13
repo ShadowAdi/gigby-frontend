@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../provider/auth'
+import { toast } from 'react-toastify'
 
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  
+
   const { login } = useAuth()
   const navigate = useNavigate()
 
@@ -18,9 +19,10 @@ export default function Login() {
 
     try {
       await login(email, password)
+      toast.success("User Loggedin successfully")
       navigate('/dashboard')
     } catch (err) {
-      setError('Invalid email or password '+err)
+      setError('Invalid email or password ' + err)
     } finally {
       setLoading(false)
     }

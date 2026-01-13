@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../provider/auth'
+import { toast } from 'react-toastify'
 
 export default function Register() {
   const [name, setName] = useState('')
@@ -26,7 +27,8 @@ export default function Register() {
 
     try {
       await register(name, email, password)
-      navigate('/dashboard')
+      toast.success("User registered successfully")
+      navigate('/login')
     } catch (err) {
       setError('Failed to create account '+err)
     } finally {
