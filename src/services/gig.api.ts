@@ -1,27 +1,22 @@
-import axios from 'axios';
-import { API_BASE_URL } from '../constants/BACKEND_URL';
+import axios from "axios";
+import { API_BASE_URL } from "../constants/BACKEND_URL";
 
-
-export const registerUser = async ({
-  name,
-  email,
-  password,
+export const createGig = async ({
+  title, description, budget
 }: {
-  name: string;
-  email: string;
-  password: string;
+  title: string;
+  description: string;
+  budget: number;
 }) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/auth/register`, {
-      name,
-      email,
-      password,
+    const response = await axios.post(`${API_BASE_URL}/gigs/`, {
+      title, description, budget
     });
 
     const data = response.data;
 
     if (!data.success) {
-      throw new Error(data.message || 'Registration failed');
+      throw new Error(data.message || 'Gig Creation failed');
     }
 
     return data;
@@ -37,27 +32,14 @@ export const registerUser = async ({
   }
 };
 
-
-export const loginUser = async ({
-  email,
-  password,
-}: {
-  email: string;
-  password: string;
-}) => {
+export const GetAllGigs = async (query:string) => {
   try {
-    const response = await axios.post(
-      `${API_BASE_URL}/auth/login`,
-      { email, password },
-      {
-        withCredentials: true,
-      }
-    );
+    const response = await axios.get(`${API_BASE_URL}/gigs?title=${query}`);
 
     const data = response.data;
 
     if (!data.success) {
-      throw new Error(data.message || 'Login failed');
+      throw new Error(data.message || 'Failed to get gigs');
     }
 
     return data;

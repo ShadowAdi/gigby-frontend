@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGigs } from '../context/GigContext'
-import { useAuth } from '../provider/auth'
+import { toast } from 'react-toastify'
+// import { useAuth } from '../provider/auth'
 
 export default function PostGig() {
   const [title, setTitle] = useState('')
@@ -10,7 +11,7 @@ export default function PostGig() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const { user } = useAuth()
+  // const { user } = useAuth()
   const { addGig } = useGigs()
   const navigate = useNavigate()
 
@@ -36,13 +37,13 @@ export default function PostGig() {
         title: title.trim(),
         description: description.trim(),
         budget: budgetNum,
-        ownerId: user!.id,
-        ownerName: user!.name
       })
 
       navigate('/dashboard')
+      toast.success("Gig created successfully")
     } catch (err) {
-      setError('Failed to post gig '+err)
+      setError('Failed to post gig ' + err)
+      toast.error("Failed to create gig")
     } finally {
       setLoading(false)
     }
@@ -52,7 +53,7 @@ export default function PostGig() {
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="bg-white rounded-lg shadow-md p-8">
         <h1 className="text-3xl font-bold text-[#212121] mb-6">Post a New Gig</h1>
-        
+
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
