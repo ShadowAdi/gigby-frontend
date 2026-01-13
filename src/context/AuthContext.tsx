@@ -41,8 +41,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const register = async (name: string, email: string, password: string) => {
     try {
       await registerUser({ name, email, password });
-
-
     } catch (error) {
       console.error('Register failed:', error);
       throw error;
