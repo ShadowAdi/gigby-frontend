@@ -36,3 +36,39 @@ export const registerUser = async ({
     throw new Error(message);
   }
 };
+
+
+export const loginUser = async ({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) => {
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/auth/login`,
+      { email, password },
+      {
+        withCredentials: true,
+      }
+    );
+
+    const data = response.data;
+
+    if (!data.success) {
+      throw new Error(data.message || 'Login failed');
+    }
+
+    return data;
+  } catch (error: unknown) {
+    const message =
+      axios.isAxiosError(error) && error.response?.data?.message
+        ? error.response.data.message
+        : error instanceof Error
+        ? error.message
+        : 'Something went wrong';
+
+    throw new Error(message);
+  }
+};
